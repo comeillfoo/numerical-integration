@@ -19,10 +19,10 @@ public enum Functions {
       "$ \\frac{\\sin{2x}}{x} $",
       Parity.EVEN
   ),
-  THIRD( ( x )->( Math.tan( x ) ),
-      "tg( x )",
-      "$ \\tan{ x } $",
-      Parity.ODD
+  THIRD( ( x )->( x * x ),
+      "x^2",
+      "$ x^2 $",
+      Parity.EVEN
   );
 
   public final Function<Double, Double> FUN;

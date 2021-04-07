@@ -50,7 +50,7 @@ public class Main {
     try {
       Resolver solver = ( option == 0 )? method.VERBOSED : method.SOLVER;
       result = ( k == 0 )? 0 : solver.solve( 0, realFun, a, b, eps, n0 );
-      IntegralShell.stdOutPrintf( "%f∫%f (%s) dx = ( %f ± %f )\n", parameters[ 0 ], parameters[ 1 ], function.TITLE, result, eps );
+      IntegralShell.stdOutPrintf( "%f∫%f (%s) dx = ( %f ± %f ) n = %d\n", parameters[ 0 ], parameters[ 1 ], function.TITLE, result, eps, solver.getN() );
     } catch ( SecondKindBreakPointException | IndeterminedArgumentValueException | IndeterminedFunctionValueException e ) {
       IntegralShell.stdErrPrintLn( e.getMessage() );
       IntegralShell.stdErrPrintLn( "Неинтегрируемая особенность подынтегрального выражения на интервале интегрирования" );

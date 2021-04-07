@@ -11,6 +11,12 @@ import java.util.function.Function;
 
 public final class MeanRectangleVerbosed implements Resolver {
   @Override
+  public int getN( ) {
+    return n;
+  }
+
+  private int n = 0;
+  @Override
   public double solve( double prevInt, Function<Double, Double> fun, double a, double b, double eps, int n ) throws IndeterminedArgumentValueException, SecondKindBreakPointException, IndeterminedFunctionValueException {
     IntegralShell.stdOutPrintf( "n_0 = % 8d\n", n );
     double sum = 0;
@@ -20,8 +26,8 @@ public final class MeanRectangleVerbosed implements Resolver {
       double hstep = ( b - a ) / n;
       IntegralShell.stdOutPrintf( "n = % 8d\n", n );
       IntegralShell.stdOutPrintf( "h = % 5.2e\n", hstep );
-      IntegralShell.stdOutPrintf( "+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+\n" );
-      IntegralShell.stdOutPrintf( "| a         | b         | n         | Δ         | a_i       | b_i       | x_i       | f(x_i)    | prev      | sum       |\n" );
+      // IntegralShell.stdOutPrintf( "+---------------+---------------+---------------+-----------+-----------+\n" );
+      // IntegralShell.stdOutPrintf( "| a_i           | b_i           | x_i           | f(x_i)    | sum       |\n" );
       for ( int i = 0; i < n; ++i ) {
         double x = a + i * hstep + hstep / 2;
         FunctionalValidator fv = new FunctionalValidator( fun, a + i * hstep, a + ( i + 1 ) * hstep );
@@ -29,23 +35,24 @@ public final class MeanRectangleVerbosed implements Resolver {
         try {
           fx = fv.f( x );
         } catch ( Exception e ) {
-          IntegralShell.stdOutPrintf( "+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+\n" );
+          // IntegralShell.stdOutPrintf( "+---------------+---------------+---------------+-----------+-----------+\n" );
           sum = sum * hstep;
           IntegralShell.stdOutPrintf( "∫ f( x ) dx ≈ %5.2e\n", sum );
-          IntegralShell.stdOutPrintf( "Δ = %5.2e; Δ = %5.2e\n\n", Math.abs( sum - prevInt ), eps );
+          IntegralShell.stdOutPrintf( "Δ = %5.2e; Δ = %5.2e; n = %d\n\n", Math.abs( sum - prevInt ), eps, n );
           throw e;
         }
         if ( !Double.isNaN( fx ) )
           sum += fx;
         else throw new IndeterminedFunctionValueException( x );
-        IntegralShell.stdOutPrintf( "| % 5.2e\t| % 5.2e\t| % 8d\t| % 5.2e\t| % 5.2e\t| % 5.2e\t| % 5.2e\t| % 5.2e\t| % 5.2e\t| % 5.2e\t|\n", a, b, n, eps, x, x + hstep, x, fx, prevInt, sum );
+        // IntegralShell.stdOutPrintf( "| % 5.4e\t| % 5.4e\t| % 5.4e\t| % 5.2e\t| % 5.2e\t|\n", x, x + hstep, x, fx, sum );
       }
-      IntegralShell.stdOutPrintf( "+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+\n" );
+      // IntegralShell.stdOutPrintf( "+---------------+---------------+---------------+-----------+-----------+\n" );
       sum = sum * hstep;
       IntegralShell.stdOutPrintf( "∫ f( x ) dx ≈ %5.2e\n", sum );
-      IntegralShell.stdOutPrintf( "Δ = %5.2e; Δ = %5.2e\n\n", Math.abs( sum - prevInt ), eps );
+      IntegralShell.stdOutPrintf( "Δ = %5.2e; Δ = %5.2e; n = %d\n\n", Math.abs( sum - prevInt ), eps, n );
       n *= 2;
     } while ( Math.abs( sum - prevInt ) > eps );
+    this.n = n / 2;
     return sum;
   }
 }

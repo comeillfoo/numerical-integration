@@ -125,6 +125,8 @@ public class Shell implements AutoCloseable, Closeable {
       System.exit( 1 );
       return Optional.empty();
     }
+    if ( value.isEmpty() )
+      return Optional.empty();
     return Optional.of( value );
   }
 
